@@ -40,61 +40,50 @@
 //
 // export default User;
 
-import {useState} from 'react';
-import {Box, Button, Chip, Container, Paper, Stack, TextField, Typography,} from '@mui/material';
+import {useCallback, useRef} from 'react';
+import {Button, Container, Paper, Stack, TextField, Typography,} from '@mui/material';
 import {SendRounded} from "@mui/icons-material";
+import MessageDashboard from "./ message-dashboard.tsx";
+import {Message, sendMessage} from "../store/slices/messageSlice.ts";
+import {useAppDispatch} from "../store/hooks";
 
 interface FirstUserProps {
     user: string;
 }
 
-const User = (prpos: FirstUserProps) => {
-    const {user} = prpos;
+const User = (props: FirstUserProps) => {
+    const {user} = props;
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const [input, setInput] = useState('');
-    const [messages, setMessages] = useState<string[]>([]);
+    const dispatch = useAppDispatch();
 
-
-    const handleSendMessage = () => {
-        if (input.trim()) {
-            setMessages([...messages, input]);
-            setInput('');
+    const handleSendMessage = useCallback(() => {
+        if (inputRef.current) {
+            const message = inputRef.current.value;
+            if (message.trim() === "") {
+                console.log("Message is empty");
+                return;
+            }
+            const messageItem: Message = {
+                id: String(Date.now()),
+                message,
+                sender: user,
+                timestamp: new Date().toLocaleString([], {hour: '2-digit', minute: '2-digit'}),
+                type: "sent",
+            };
+            dispatch(sendMessage(messageItem));
+            inputRef.current.value = "";
         }
-    };
+    }, [dispatch, user]);
 
     return (
         <Container maxWidth="sm" sx={{mt: 4}}>
             <Paper
                 elevation={3} sx={{padding: 2}}>
                 <Typography variant="h4" align="center" gutterBottom>
-                    {user === "1" ? "User - 1" : "User - 2"}
+                    {user}
                 </Typography>
-                <Box
-                    sx={{
-                        height: 400,
-                        overflowY: 'auto',
-                    }}
-                >
-                    <Stack sx={{
-                        height: "90%",
-                        gap: 1,
-                        paddingX: 1,
-                        justifyContent: `${user === "1" ? 'flex-start' : 'flex-end'}`
-                    }}>
-                        {messages.map((msg, index) => (
-                            <Chip key={index}
-                                  component={Paper}
-                                  label={msg}
-                                  color={"secondary"}
-                                  sx={{
-                                      maxWidth: 400,
-                                      width: 'fit-content',
-                                      alignSelf: 'flex-end'
-                                  }}
-                            />
-                        ))}
-                    </Stack>
-                </Box>
+                <MessageDashboard user={user}/>
                 <Stack
                     sx={{
                         flexDirection: 'row',
@@ -106,9 +95,8 @@ const User = (prpos: FirstUserProps) => {
                     <TextField
                         variant="outlined"
                         fullWidth
+                        inputRef={inputRef}
                         color={"success"}
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
                         placeholder="Message..."
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -119,7 +107,6 @@ const User = (prpos: FirstUserProps) => {
                             borderRadius: 50,
                             bgcolor: 'grey.A200',
                             "& .MuiOutlinedInput-root": {
-                                padding: 0,
                                 "& input": {
                                     padding: "16px 0 16px 22px",
                                     borderRadius: 50,
@@ -144,8 +131,7 @@ const User = (prpos: FirstUserProps) => {
                 </Stack>
             </Paper>
         </Container>
-    )
-        ;
+    );
 };
 
 export default User;

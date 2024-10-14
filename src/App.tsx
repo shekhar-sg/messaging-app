@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {Stack, Tab} from "@mui/material";
+import User from "./components/user.tsx";
+import {TabContext, TabList, TabPanel} from "@mui/lab";
+import {SyntheticEvent, useState} from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const App = () => {
+    const [value, setValue] = useState("user-1")
+    const handleChange = (_event: SyntheticEvent, newValue: string) => {
+        setValue(newValue)
+    }
+    // console.log("value",value);
+    return (
+        <Stack
+            sx={{
+                width: "100%",
+                typography: "body1",
+            }}
+        >
+            <TabContext value={value}>
+                <TabList onChange={handleChange}>
+                    <Tab label={"First User"} value={"user-1"}/>
+                    <Tab label={"Second User"} value={"user-2"}/>
+                </TabList>
+                <TabPanel value={"user-1"}>
+                    <User user={"user-1"}/>
+                </TabPanel>
+                <TabPanel value={"user-2"}>
+                    <User user={"user-2"}/>
+                </TabPanel>
+            </TabContext>
+        </Stack>
+    )
 }
 
 export default App
+
+//
+// <TabPanel value={"1"}>
+//     <User/>
+//     </TabPanel>
+// <TabPanel value={"2"}>
+//     <User/>
+// </TabPanel>
