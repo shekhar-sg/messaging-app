@@ -11,28 +11,32 @@ const MessageDashboard = ({user}: { user: User }) => {
     const messages = useAppSelector((state) => state.message);
     const dispatch = useAppDispatch();
 
+    const ref = useRef<HTMLSpanElement>(null);
     useEffect(() => {
         const messageReceivedIds = messages.filter((item) => item.sender !== name && !item.isViewed).map((item) => item.id);
         if (messageReceivedIds.length > 0)
-            dispatch(handleMessageViewed(messageReceivedIds))
+            dispatch(handleMessageViewed(messageReceivedIds));
+        if (ref.current)
+            ref.current.scrollIntoView({behavior: "smooth"});
     }, [dispatch, messages, name]);
+
 
     return (
         <Stack
             ref={dashboardRef}
-            justifyContent={"flex-end"}
+            // justifyContent={"flex-end"}
             rowGap={1}
             sx={{
                 display: "flex",
                 flexDirection: "column",
                 height: {
-                    xs: 330,
+                    xs: "100%",
                     sm: 440,
                     md: 550
                 },
                 py: 0.2,
                 px: 4,
-                overflowY: "auto",
+                overflowY: "scroll",
             }}
         >
             {messages.map((item) => {
@@ -80,7 +84,7 @@ const MessageDashboard = ({user}: { user: User }) => {
                     </Paper>
                 )
             })}
-            {/*<Box component={"span"} ref={ref}/>*/}
+            <Box component={"span"} ref={ref}/>
         </Stack>
     );
 };

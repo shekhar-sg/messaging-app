@@ -1,5 +1,16 @@
 import {useCallback, useRef} from 'react';
-import {Avatar, Button, Card, CardActions, CardContent, CardHeader, IconButton, Link, TextField,} from '@mui/material';
+import {
+    Avatar,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    IconButton,
+    Link,
+    Stack,
+    TextField,
+} from '@mui/material';
 import {GitHub, SendRounded} from "@mui/icons-material";
 import MessageDashboard from "./message/message-dashboard.tsx";
 import {handleMessageReceived, MessageType, sendMessage} from "../store/slices/messageSlice.ts";
@@ -41,16 +52,22 @@ const UserPanel = ({user}: FirstUserProps) => {
     }, [dispatch, name]);
 
     return (
-        <Card sx={{
-            maxWidth: "sm",
-            marginX: "auto",
-            bgcolor: "transparent",
-            backdropFilter: "blur(10px)",
-        }}>
+        <Card
+            component={Stack}
+            sx={{
+                maxWidth: "sm",
+                marginX: "auto",
+                height: {
+                    xs: "100%",
+                    sm: "auto",
+                },
+                bgcolor: "transparent",
+                backdropFilter: "blur(8px)",
+                boxShadow: 20,
+            }}>
             <CardHeader
                 sx={{
-                    backdropFilter: "blur(40px) brightness(5)",
-                    // backgroundColor: "burlywood",
+                    bgcolor: "blueviolet",
                     justifyContent: "center",
                     alignItems: "center",
                 }}
@@ -58,7 +75,7 @@ const UserPanel = ({user}: FirstUserProps) => {
                     <Avatar sizes={"large"} src={avatar}/>
                 }
                 title={name}
-                titleTypographyProps={{variant: "h4", textTransform: "capitalize",color:"white"}}
+                titleTypographyProps={{variant: "h4", textTransform: "capitalize", color: "white"}}
                 action={
                     <IconButton
                         LinkComponent={Link}
@@ -70,7 +87,12 @@ const UserPanel = ({user}: FirstUserProps) => {
                     </IconButton>
                 }
             />
-            <CardContent>
+            <CardContent sx={{
+                height: {
+                    xs: "100%",
+                    sm: "auto",
+                }
+            }}>
                 <MessageDashboard user={user}/>
             </CardContent>
             <CardActions
@@ -96,7 +118,7 @@ const UserPanel = ({user}: FirstUserProps) => {
                     }}
                     sx={{
                         bgcolor: 'grey.A200',
-                            borderRadius: 2,
+                        borderRadius: 2,
                         '& *': {
                             borderRadius: 2,
                         }

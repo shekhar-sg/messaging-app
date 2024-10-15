@@ -2,13 +2,13 @@ import {AppBar, Stack, Tab} from "@mui/material";
 import UserPanel from "./components/user-panel.tsx";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import {SyntheticEvent, useState} from "react";
+import {users} from "./constants";
 
 export type User = {
     name: string;
     avatar: string;
 }
 
-export const users = [{name: "user-1", avatar: ""}, {name: "user-2", avatar: ""}]
 
 const App = () => {
     const [value, setValue] = useState("user-1")
@@ -21,6 +21,7 @@ const App = () => {
                 width: "100%",
                 height: "100svh",
                 justifyContent: "center",
+                alignItems: "center",
                 bgcolor: "beige",
                 backgroundImage: "url(/images/background.jpg)",
                 backgroundRepeat: "no-repeat",
@@ -30,7 +31,7 @@ const App = () => {
         >
             <TabContext value={value}>
                 <AppBar sx={{
-                    bgcolor: "secondary.main",
+                    bgcolor: "blueviolet",
                     borderBottom: "1px solid",
                     borderColor: "grey.300",
                     p: 1
@@ -65,7 +66,21 @@ const App = () => {
                 {users.map((user, index) => {
                     const {name} = user
                     return (
-                        <TabPanel value={name} key={`${index}-${name}`}>
+                        <TabPanel value={name} key={`${index}-${name}`}
+                                  sx={{
+                                      height: "100%",
+                                      width: "100%",
+                                      padding: {
+                                          xs: 0,
+                                          sm: 4
+                                      },
+                                      paddingTop: {
+                                          xs: 7,
+                                          sm: 16
+                                      },
+                                      backdropFilter: "blur(3px)"
+                                  }}
+                        >
                             <UserPanel user={user}/>
                         </TabPanel>
                     )
