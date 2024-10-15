@@ -1,29 +1,48 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-export interface Message {
+export interface MessageType {
     id: string;
     message: string;
     sender: string;
     timestamp: Date | number;
-    type: "sent" | "received";
+    isSent?: boolean;
+    isReceived?: boolean;
+    isViewed?: boolean;
 }
 
-const initialState: Message[] = [];
+const initialState: MessageType[] = [];
 
 
 export const messageSlice = createSlice({
     name: "message",
     initialState,
     reducers: {
-        sendMessage: (state, {payload}: { payload: Omit<Message, 'type'> }) => {
+        resetChat: () => initialState,
+        sendMessage: (state, {payload}: { payload: MessageType }) => {
             state.push({
                 ...payload,
-                type: "sent"
+                isSent: true,
             });
         },
+        handleMessageReceived: (state, {payload}: { payload: string }) => {
+            state.forEach((message) => {
+                if (message.id === payload) {
+                    message.isReceived = true;
+                }
+            });
+        },
+        handleMessageViewed: (state, {payload}: { payload: string[] }) => {
+            state.forEach((message) => {
+                if (payload.includes(message.id)) {
+                    if (!message.isReceived) message.isReceived = true;
+
+                    message.isViewed = true;
+                }
+            });
+        }
     }
 })
 
-export const {sendMessage} = messageSlice.actions;
+export const {sendMessage, handleMessageViewed, handleMessageReceived} = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -1,25 +1,42 @@
-import {useAppSelector} from "../../store/hooks";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {Box, Paper, Stack, Typography} from "@mui/material";
 import MessageInfo from "./message-info.tsx";
+import {User} from "../../App.tsx";
+import {useEffect, useRef} from "react";
+import {handleMessageViewed} from "../../store/slices/messageSlice.ts";
 
-const MessageDashboard = ({user}: { user: string }) => {
+const MessageDashboard = ({user}: { user: User }) => {
+    const {name} = user
+    const dashboardRef = useRef<HTMLDivElement>(null);
     const messages = useAppSelector((state) => state.message);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const messageReceivedIds = messages.filter((item) => item.sender !== name && !item.isViewed).map((item) => item.id);
+        if (messageReceivedIds.length > 0)
+            dispatch(handleMessageViewed(messageReceivedIds))
+    }, [dispatch, messages, name]);
 
     return (
         <Stack
+            ref={dashboardRef}
+            justifyContent={"flex-end"}
+            rowGap={1}
             sx={{
+                display: "flex",
+                flexDirection: "column",
                 height: {
                     xs: 330,
                     sm: 440,
                     md: 550
                 },
-                padding: "42px 24px",
+                py: 0.2,
+                px: 4,
                 overflowY: "auto",
-                gap: 1,
             }}
         >
             {messages.map((item) => {
-                const isSameUser = item.sender === user;
+                const isSameUser = item.sender === name;
                 return (
                     <Paper
                         key={item.id}
@@ -33,7 +50,8 @@ const MessageDashboard = ({user}: { user: string }) => {
                             maxWidth: "70%",
                             padding: "6px 12px",
                             borderRadius: isSameUser ? "12px 0 12px 12px" : "0 12px 12px 12px",
-                            backgroundColor: isSameUser ? "warning.light" : "grey.300",
+                            backgroundColor: isSameUser ? "success.light" : "grey.300",
+                            color: isSameUser ? "white" : "black",
                         }}
                     >
                         <Box
@@ -44,7 +62,7 @@ const MessageDashboard = ({user}: { user: string }) => {
                                 left: !isSameUser ? -15 : "auto",
                                 border: 15,
                                 borderRadius: 2,
-                                borderColor: ((theme) => isSameUser ? `${theme.palette.warning.light} transparent transparent` : `${theme.palette.grey[300]} transparent transparent`),
+                                borderColor: ((theme) => isSameUser ? `${theme.palette.success.light} transparent transparent` : `${theme.palette.grey[300]} transparent transparent`),
 
                             }}
                         />
@@ -58,11 +76,11 @@ const MessageDashboard = ({user}: { user: string }) => {
                                     }}
                         >{item.message}
                         </Typography>
-                        <MessageInfo time={item.timestamp} info={isSameUser}/>
+                        <MessageInfo message={item} isSameUser={isSameUser}/>
                     </Paper>
                 )
             })}
-            {/*<Box component={"span"} ref={bottomRef}/>*/}
+            {/*<Box component={"span"} ref={ref}/>*/}
         </Stack>
     );
 };

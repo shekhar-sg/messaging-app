@@ -1,7 +1,12 @@
-import {AppBar, Stack, Tab, tabClasses} from "@mui/material";
-import User from "./components/user.tsx";
+import {AppBar, Stack, Tab} from "@mui/material";
+import UserPanel from "./components/user-panel.tsx";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import {SyntheticEvent, useState} from "react";
+
+export type User = {
+    name: string;
+    avatar: string;
+}
 
 export const users = [{name: "user-1", avatar: ""}, {name: "user-2", avatar: ""}]
 
@@ -17,11 +22,15 @@ const App = () => {
                 height: "100svh",
                 justifyContent: "center",
                 bgcolor: "beige",
+                backgroundImage: "url(/images/background.jpg)",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
             }}
         >
             <TabContext value={value}>
                 <AppBar sx={{
-                    bgcolor: "transparent",
+                    bgcolor: "secondary.main",
                     borderBottom: "1px solid",
                     borderColor: "grey.300",
                     p: 1
@@ -34,7 +43,7 @@ const App = () => {
                              }}
                              TabIndicatorProps={{
                                  sx: {
-                                     bgcolor: "warning.dark",
+                                     bgcolor: "whitesmoke",
                                  }
                              }}
 
@@ -43,23 +52,21 @@ const App = () => {
                             return (
                                 <Tab
                                     key={`${index}-${name}`}
-                                    label={name} value={name}
+                                    label={name}
+                                    value={name}
                                     sx={{
-                                        color: "warning.dark",
                                         fontWeight: "bold",
-                                        [`&.${tabClasses.selected}`]: {
-                                            color: "warning.main",
-                                        },
                                     }}
                                 />
                             )
                         })}
                     </TabList>
                 </AppBar>
-                {users.map(({name,avatar}, index) => {
+                {users.map((user, index) => {
+                    const {name} = user
                     return (
                         <TabPanel value={name} key={`${index}-${name}`}>
-                            <User user={name} avatar={avatar}/>
+                            <UserPanel user={user}/>
                         </TabPanel>
                     )
                 })}

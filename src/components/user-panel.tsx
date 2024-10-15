@@ -2,17 +2,17 @@ import {useCallback, useRef} from 'react';
 import {Avatar, Button, Card, CardActions, CardContent, CardHeader, IconButton, Link, TextField,} from '@mui/material';
 import {GitHub, SendRounded} from "@mui/icons-material";
 import MessageDashboard from "./message/message-dashboard.tsx";
-import {Message, sendMessage} from "../store/slices/messageSlice.ts";
+import {handleMessageReceived, MessageType, sendMessage} from "../store/slices/messageSlice.ts";
 import {useAppDispatch} from "../store/hooks";
 import {enqueueSnackbar} from "notistack";
+import {User} from "../App.tsx";
 
 interface FirstUserProps {
-    user: string;
-    avatar: string;
+    user: User
 }
 
-const User = (props: FirstUserProps) => {
-    const {user:sender,avatar} = props;
+const UserPanel = ({user}: FirstUserProps) => {
+    const {name, avatar} = user;
     const inputRef = useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch();
 
@@ -26,34 +26,39 @@ const User = (props: FirstUserProps) => {
                 return;
             }
             const timestamp = Date.now();
-            const messageItem: Omit<Message,'type'> = {
+            const messageItem: Omit<MessageType, 'type'> = {
                 id: timestamp.toString(),
                 message,
-                sender,
+                sender: name,
                 timestamp,
             };
             dispatch(sendMessage(messageItem));
+            setTimeout(() => {
+                dispatch(handleMessageReceived(messageItem.id));
+            }, 1000);
             inputRef.current.value = "";
         }
-    }, [dispatch, sender]);
+    }, [dispatch, name]);
 
     return (
         <Card sx={{
             maxWidth: "sm",
             marginX: "auto",
-            bgcolor: "antiquewhite",
+            bgcolor: "transparent",
+            backdropFilter: "blur(10px)",
         }}>
             <CardHeader
                 sx={{
-                    backgroundColor: "burlywood",
+                    backdropFilter: "blur(40px) brightness(5)",
+                    // backgroundColor: "burlywood",
                     justifyContent: "center",
                     alignItems: "center",
                 }}
                 avatar={
                     <Avatar sizes={"large"} src={avatar}/>
                 }
-                title={sender}
-                titleTypographyProps={{variant: "h4", textTransform: "capitalize"}}
+                title={name}
+                titleTypographyProps={{variant: "h4", textTransform: "capitalize",color:"white"}}
                 action={
                     <IconButton
                         LinkComponent={Link}
@@ -66,7 +71,7 @@ const User = (props: FirstUserProps) => {
                 }
             />
             <CardContent>
-                <MessageDashboard user={sender}/>
+                <MessageDashboard user={user}/>
             </CardContent>
             <CardActions
                 sx={{
@@ -82,35 +87,24 @@ const User = (props: FirstUserProps) => {
                     variant="outlined"
                     fullWidth
                     inputRef={inputRef}
-                    color={"warning"}
+                    color={"secondary"}
                     placeholder="Message..."
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             handleSendMessage();
                         }
                     }}
-                    slotProps={{
-                        input:{
-                            sx:{
-                                borderRadius: 50,
-                            }
-                        },
-                        htmlInput:{
-                            sx:{
-                                padding: "16px 0 16px 22px",
-                                borderRadius: 50,
-                            }
-                        }
-                    }}
-
                     sx={{
-                        borderRadius: 50,
                         bgcolor: 'grey.A200',
+                            borderRadius: 2,
+                        '& *': {
+                            borderRadius: 2,
+                        }
                     }}
                 />
                 <Button
                     variant={"contained"}
-                    color={"warning"}
+                    color={"secondary"}
                     onClick={handleSendMessage}
                     sx={{borderRadius: 50, minWidth: "auto", padding: 2}}
                 >
@@ -121,4 +115,4 @@ const User = (props: FirstUserProps) => {
     );
 };
 
-export default User;
+export default UserPanel;
