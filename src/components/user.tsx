@@ -41,9 +41,9 @@
 // export default User;
 
 import {useCallback, useRef} from 'react';
-import {Button, Container, Paper, Stack, TextField, Typography,} from '@mui/material';
-import {SendRounded} from "@mui/icons-material";
-import MessageDashboard from "./ message-dashboard.tsx";
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader, IconButton, TextField,} from '@mui/material';
+import {GitHub, SendRounded} from "@mui/icons-material";
+import MessageDashboard from "./message/message-dashboard.tsx";
 import {Message, sendMessage} from "../store/slices/messageSlice.ts";
 import {useAppDispatch} from "../store/hooks";
 
@@ -77,60 +77,84 @@ const User = (props: FirstUserProps) => {
     }, [dispatch, user]);
 
     return (
-        <Container maxWidth="sm" sx={{mt: 4}}>
-            <Paper
-                elevation={3} sx={{padding: 2}}>
-                <Typography variant="h4" align="center" gutterBottom>
-                    {user}
-                </Typography>
-                <MessageDashboard user={user}/>
-                <Stack
-                    sx={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: 1
-                    }}
-                >
-                    <TextField
-                        variant="outlined"
-                        fullWidth
-                        inputRef={inputRef}
-                        color={"success"}
-                        placeholder="Message..."
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                handleSendMessage();
-                            }
+        <Card sx={{
+            maxWidth: "sm",
+            marginX: "auto",
+            bgcolor: "antiquewhite",
+        }}>
+            <CardHeader
+                sx={{
+                    backgroundColor: "burlywood",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+                avatar={
+                    <Avatar sizes={"large"} sx={{bgcolor: "warning.main"}}>{user === "user-1" ? "1" : 2}</Avatar>
+                }
+                title={user}
+                titleTypographyProps={{variant: "h4", textTransform: "capitalize"}}
+                action={
+                    <IconButton
+                        sx={{color:"black"}}
+                        onClick={() => {
+                            window.open("https://github.com/shekhar-sg/messaging-app", "_blank");
                         }}
-                        sx={{
-                            borderRadius: 50,
-                            bgcolor: 'grey.A200',
-                            "& .MuiOutlinedInput-root": {
-                                "& input": {
-                                    padding: "16px 0 16px 22px",
-                                    borderRadius: 50,
-                                },
-                                borderRadius: 50,
-                                "& fieldset": {
-                                    // display: 'none',
-                                    borderRadius: 50,
-                                }
-                            }
-
-                        }}
-                    />
-                    <Button
-                        variant={"contained"}
-                        color={"success"}
-                        onClick={handleSendMessage}
-                        sx={{borderRadius: 50, minWidth: "auto", padding: 2}}
                     >
-                        <SendRounded sx={{fontSize: 20}}/>
-                    </Button>
-                </Stack>
-            </Paper>
-        </Container>
+                        <GitHub fontSize={"large"}/>
+                    </IconButton>
+                }
+            />
+            <CardContent>
+                <MessageDashboard user={user}/>
+            </CardContent>
+            <CardActions
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 1,
+                    padding: 2,
+                }}
+            >
+                <TextField
+                    variant="outlined"
+                    fullWidth
+                    inputRef={inputRef}
+                    color={"warning"}
+                    placeholder="Message..."
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSendMessage();
+                        }
+                    }}
+                    sx={{
+                        borderRadius: 50,
+                        bgcolor: 'grey.A200',
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: 50,
+                            "& input": {
+                                padding: "16px 0 16px 22px",
+                                borderRadius: 50,
+                            },
+                            "& fieldset": {
+                                // display: 'none',
+                                borderRadius: 50,
+                            }
+                        }
+
+                    }}
+                />
+                <Button
+                    variant={"contained"}
+                    color={"warning"}
+                    onClick={handleSendMessage}
+                    sx={{borderRadius: 50, minWidth: "auto", padding: 2}}
+                >
+                    <SendRounded sx={{fontSize: 20}}/>
+                </Button>
+            </CardActions>
+        </Card>
     );
 };
 

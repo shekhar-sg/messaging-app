@@ -8,7 +8,7 @@ const theme = createTheme({
                     margin: 0,
                 }
             })
-        }
+        },
     }
 })
 
