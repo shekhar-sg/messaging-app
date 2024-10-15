@@ -103,9 +103,11 @@ const UserPanel = ({user}: FirstUserProps) => {
             />
             <CardContent sx={{
                 height: {
-                    xs: "100%",
+                    xs: 1,
                     sm: "auto",
-                }
+                },
+                overflowY: "auto",
+                scrollbarWidth: "none",
             }}>
                 <MessageDashboard user={user}/>
             </CardContent>

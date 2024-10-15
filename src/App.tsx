@@ -66,7 +66,8 @@ const App = () => {
                     return (
                         <TabPanel value={name} key={`${index}-${name}`}
                                   sx={{
-                                      height: "calc(100svh - 64px)",
+                                      maxHeight: "calc(100% - 64px)",
+                                      height: "calc(100% - 64px)",
                                       width: "100%",
                                       padding: {
                                           xs: 0,

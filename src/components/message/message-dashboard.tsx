@@ -26,20 +26,11 @@ const MessageDashboard = ({user}: { user: User }) => {
             ref={dashboardRef}
             rowGap={1}
             sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: {
-                    xs: "100%",
-                    sm: 440,
-                    md: 550
-                },
                 py: 0.2,
                 px: {
                     xs: 2,
                     sm: 4,
                 },
-                overflowY: "scroll",
-                scrollbarWidth: "none",
             }}
         >
             {messages.map((item) => {
@@ -89,6 +80,7 @@ const MessageDashboard = ({user}: { user: User }) => {
             })}
             <Box component={"span"} ref={ref}/>
         </Stack>
+
     );
 };
 
