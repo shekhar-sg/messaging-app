@@ -76,11 +76,3 @@ const App = () => {
 }
 
 export default App
-
-//
-// <TabPanel value={"1"}>
-//     <User/>
-//     </TabPanel>
-// <TabPanel value={"2"}>
-//     <User/>
-// </TabPanel>
