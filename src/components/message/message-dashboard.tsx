@@ -39,6 +39,7 @@ const MessageDashboard = ({user}: { user: User }) => {
                     sm: 4,
                 },
                 overflowY: "scroll",
+                scrollbarWidth: "none",
             }}
         >
             {messages.map((item) => {

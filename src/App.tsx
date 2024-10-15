@@ -22,7 +22,7 @@ const App = () => {
                 height: "100svh",
                 justifyContent: "end",
                 bgcolor: "beige",
-                backgroundImage: "url(/images/background.jpg)",
+                backgroundImage: "url(/images/bg.jpg)",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",

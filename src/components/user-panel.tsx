@@ -64,7 +64,7 @@ const UserPanel = ({user}: FirstUserProps) => {
                 bgcolor: "transparent",
                 backdropFilter: {
                     xs: "blur(3px) brightness(0.6)",
-                    sm: "blur(8px)",
+                    sm: "blur(8px) brightness(0.8)",
                 },
                 boxShadow: "inset 0 0 10px 0 #ffffff",
                 mt: {
