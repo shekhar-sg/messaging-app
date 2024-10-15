@@ -24,7 +24,6 @@ const MessageDashboard = ({user}: { user: User }) => {
     return (
         <Stack
             ref={dashboardRef}
-            // justifyContent={"flex-end"}
             rowGap={1}
             sx={{
                 display: "flex",
@@ -35,7 +34,10 @@ const MessageDashboard = ({user}: { user: User }) => {
                     md: 550
                 },
                 py: 0.2,
-                px: 4,
+                px: {
+                    xs: 2,
+                    sm: 4,
+                },
                 overflowY: "scroll",
             }}
         >
@@ -54,7 +56,7 @@ const MessageDashboard = ({user}: { user: User }) => {
                             maxWidth: "70%",
                             padding: "6px 12px",
                             borderRadius: isSameUser ? "12px 0 12px 12px" : "0 12px 12px 12px",
-                            backgroundColor: isSameUser ? "success.light" : "grey.300",
+                            backgroundColor: isSameUser ? "secondary.light" : "grey.300",
                             color: isSameUser ? "white" : "black",
                         }}
                     >
@@ -66,7 +68,7 @@ const MessageDashboard = ({user}: { user: User }) => {
                                 left: !isSameUser ? -15 : "auto",
                                 border: 15,
                                 borderRadius: 2,
-                                borderColor: ((theme) => isSameUser ? `${theme.palette.success.light} transparent transparent` : `${theme.palette.grey[300]} transparent transparent`),
+                                borderColor: ((theme) => isSameUser ? `${theme.palette.secondary.light} transparent transparent` : `${theme.palette.grey[300]} transparent transparent`),
 
                             }}
                         />

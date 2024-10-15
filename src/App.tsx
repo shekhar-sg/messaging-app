@@ -20,8 +20,7 @@ const App = () => {
             sx={{
                 width: "100%",
                 height: "100svh",
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: "end",
                 bgcolor: "beige",
                 backgroundImage: "url(/images/background.jpg)",
                 backgroundRepeat: "no-repeat",
@@ -31,10 +30,9 @@ const App = () => {
         >
             <TabContext value={value}>
                 <AppBar sx={{
-                    bgcolor: "blueviolet",
-                    borderBottom: "1px solid",
-                    borderColor: "grey.300",
-                    p: 1
+                    justifyContent: "center",
+                    bgcolor: "secondary.main",
+                    height: 64,
                 }}>
                     <TabList onChange={handleChange}
                              textColor={"inherit"}
@@ -68,17 +66,12 @@ const App = () => {
                     return (
                         <TabPanel value={name} key={`${index}-${name}`}
                                   sx={{
-                                      height: "100%",
+                                      height: "calc(100svh - 64px)",
                                       width: "100%",
                                       padding: {
                                           xs: 0,
                                           sm: 4
                                       },
-                                      paddingTop: {
-                                          xs: 7,
-                                          sm: 16
-                                      },
-                                      backdropFilter: "blur(3px)"
                                   }}
                         >
                             <UserPanel user={user}/>

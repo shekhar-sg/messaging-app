@@ -62,20 +62,34 @@ const UserPanel = ({user}: FirstUserProps) => {
                     sm: "auto",
                 },
                 bgcolor: "transparent",
-                backdropFilter: "blur(8px)",
-                boxShadow: 20,
-            }}>
+                backdropFilter: {
+                    xs: "blur(3px) brightness(0.6)",
+                    sm: "blur(8px)",
+                },
+                boxShadow: "inset 0 0 10px 0 #ffffff",
+                mt: {
+                    xs: 0,
+                    sm: 4,
+                },
+            }}
+        >
             <CardHeader
                 sx={{
-                    bgcolor: "blueviolet",
+                    bgcolor: "grey.A200",
                     justifyContent: "center",
                     alignItems: "center",
+                    paddingY: 0.5,
+                    paddingx: 2,
                 }}
                 avatar={
                     <Avatar sizes={"large"} src={avatar}/>
                 }
                 title={name}
-                titleTypographyProps={{variant: "h4", textTransform: "capitalize", color: "white"}}
+                titleTypographyProps={{
+                    variant: "h4",
+                    fontSize: {xs: 22, sm: 28},
+                    textTransform: "capitalize",
+                }}
                 action={
                     <IconButton
                         LinkComponent={Link}
