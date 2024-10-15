@@ -59,7 +59,7 @@ const UserPanel = ({user}: FirstUserProps) => {
                 marginX: "auto",
                 height: {
                     xs: "100%",
-                    sm: "auto",
+                    sm: 640,
                 },
                 bgcolor: "transparent",
                 backdropFilter: {
@@ -104,7 +104,7 @@ const UserPanel = ({user}: FirstUserProps) => {
             <CardContent sx={{
                 height: {
                     xs: 1,
-                    sm: "auto",
+                    sm: "100%",
                 },
                 overflowY: "auto",
                 scrollbarWidth: "none",
