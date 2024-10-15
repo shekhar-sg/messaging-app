@@ -1,80 +1,41 @@
-// import {Box, Button, Paper, Stack, TextField, Typography} from '@mui/material';
-// import {useState} from "react";
-//
-// const User = () => {
-//     const [messages, setMessages] = useState<string[]>([]);
-//     const [input, setInput] = useState<string>('');
-//
-//     const handleSend = () => {
-//         if (input.trim()) {
-//             setMessages([...messages, input]);
-//             setInput('');
-//         }
-//     };
-//
-//     return (
-//         <Box p={2}>
-//             <Typography variant="h4" gutterBottom>Chat App</Typography>
-//             <Stack spacing={2}>
-//                 <Stack direction="row" spacing={1}>
-//                     <TextField
-//                         fullWidth
-//                         variant="outlined"
-//                         placeholder="Type a message"
-//                         value={input}
-//                         onChange={(e) => setInput(e.target.value)}
-//                     />
-//                     <Button variant="contained" onClick={handleSend}>Send</Button>
-//                 </Stack>
-//                 <Box>
-//                     {messages.map((message, index) => (
-//                         <Paper key={index} elevation={3} sx={{padding: 2, marginBottom: 1}}>
-//                             <Typography variant="body1">{message}</Typography>
-//                         </Paper>
-//                     ))}
-//                 </Box>
-//             </Stack>
-//         </Box>
-//     );
-// };
-//
-// export default User;
-
 import {useCallback, useRef} from 'react';
-import {Avatar, Button, Card, CardActions, CardContent, CardHeader, IconButton, TextField,} from '@mui/material';
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader, IconButton, Link, TextField,} from '@mui/material';
 import {GitHub, SendRounded} from "@mui/icons-material";
 import MessageDashboard from "./message/message-dashboard.tsx";
 import {Message, sendMessage} from "../store/slices/messageSlice.ts";
 import {useAppDispatch} from "../store/hooks";
+import {enqueueSnackbar} from "notistack";
 
 interface FirstUserProps {
     user: string;
+    avatar: string;
 }
 
 const User = (props: FirstUserProps) => {
-    const {user} = props;
+    const {user:sender,avatar} = props;
     const inputRef = useRef<HTMLInputElement>(null);
-
     const dispatch = useAppDispatch();
 
     const handleSendMessage = useCallback(() => {
         if (inputRef.current) {
             const message = inputRef.current.value;
             if (message.trim() === "") {
-                console.log("Message is empty");
+                enqueueSnackbar("Please enter a message", {
+                    variant: "error",
+                });
                 return;
             }
-            const messageItem: Message = {
-                id: String(Date.now()),
+            const timestamp = Date.now();
+            const messageItem: Omit<Message,'type'> = {
+                id: timestamp.toString(),
                 message,
-                sender: user,
-                timestamp: new Date().toLocaleString([], {hour: '2-digit', minute: '2-digit'}),
-                type: "sent",
+                sender,
+                timestamp,
             };
             dispatch(sendMessage(messageItem));
             inputRef.current.value = "";
         }
-    }, [dispatch, user]);
+    }, [dispatch, sender]);
 
     return (
         <Card sx={{
@@ -89,23 +50,23 @@ const User = (props: FirstUserProps) => {
                     alignItems: "center",
                 }}
                 avatar={
-                    <Avatar sizes={"large"} sx={{bgcolor: "warning.main"}}>{user === "user-1" ? "1" : 2}</Avatar>
+                    <Avatar sizes={"large"} src={avatar}/>
                 }
-                title={user}
+                title={sender}
                 titleTypographyProps={{variant: "h4", textTransform: "capitalize"}}
                 action={
                     <IconButton
-                        sx={{color:"black"}}
-                        onClick={() => {
-                            window.open("https://github.com/shekhar-sg/messaging-app", "_blank");
-                        }}
+                        LinkComponent={Link}
+                        sx={{color: "black"}}
+                        href={"https://github.com/shekhar-sg/messaging-app"}
+                        target={"_blank"}
                     >
                         <GitHub fontSize={"large"}/>
                     </IconButton>
                 }
             />
             <CardContent>
-                <MessageDashboard user={user}/>
+                <MessageDashboard user={sender}/>
             </CardContent>
             <CardActions
                 sx={{
@@ -128,21 +89,23 @@ const User = (props: FirstUserProps) => {
                             handleSendMessage();
                         }
                     }}
-                    sx={{
-                        borderRadius: 50,
-                        bgcolor: 'grey.A200',
-                        "& .MuiOutlinedInput-root": {
-                            borderRadius: 50,
-                            "& input": {
-                                padding: "16px 0 16px 22px",
+                    slotProps={{
+                        input:{
+                            sx:{
                                 borderRadius: 50,
-                            },
-                            "& fieldset": {
-                                // display: 'none',
+                            }
+                        },
+                        htmlInput:{
+                            sx:{
+                                padding: "16px 0 16px 22px",
                                 borderRadius: 50,
                             }
                         }
+                    }}
 
+                    sx={{
+                        borderRadius: 50,
+                        bgcolor: 'grey.A200',
                     }}
                 />
                 <Button

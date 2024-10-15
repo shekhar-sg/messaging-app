@@ -4,7 +4,7 @@ export interface Message {
     id: string;
     message: string;
     sender: string;
-    timestamp: string;
+    timestamp: Date | number;
     type: "sent" | "received";
 }
 
@@ -15,17 +15,15 @@ export const messageSlice = createSlice({
     name: "message",
     initialState,
     reducers: {
-        sendMessage: (state, action) => {
-            state.push(action.payload);
+        sendMessage: (state, {payload}: { payload: Omit<Message, 'type'> }) => {
+            state.push({
+                ...payload,
+                type: "sent"
+            });
         },
-        // save message by which when refreshing the browser the data will be still same
-        saveMessage: (state, action) => {
-            state.push(action.payload);
-            window.localStorage.setItem("messages", JSON.stringify(state));
-        }
     }
 })
 
-export const {sendMessage,saveMessage} = messageSlice.actions;
+export const {sendMessage} = messageSlice.actions;
 
 export default messageSlice.reducer;

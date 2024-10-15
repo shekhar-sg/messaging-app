@@ -3,7 +3,7 @@ import User from "./components/user.tsx";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import {SyntheticEvent, useState} from "react";
 
-const users = ["user-1", "user-2"] as const
+export const users = [{name: "user-1", avatar: ""}, {name: "user-2", avatar: ""}]
 
 const App = () => {
     const [value, setValue] = useState("user-1")
@@ -24,7 +24,7 @@ const App = () => {
                     bgcolor: "transparent",
                     borderBottom: "1px solid",
                     borderColor: "grey.300",
-                    p:1
+                    p: 1
                 }}>
                     <TabList onChange={handleChange}
                              textColor={"inherit"}
@@ -39,27 +39,30 @@ const App = () => {
                              }}
 
                     >
-                        {users.map((user) => {
+                        {users.map(({name}, index) => {
                             return (
-                                <Tab label={user} value={user}
-                                     sx={{
-                                         color: "warning.dark",
-                                         fontWeight: "bold",
-                                         [`&.${tabClasses.selected}`]: {
-                                             color: "warning.main",
-                                         },
-                                     }}
+                                <Tab
+                                    key={`${index}-${name}`}
+                                    label={name} value={name}
+                                    sx={{
+                                        color: "warning.dark",
+                                        fontWeight: "bold",
+                                        [`&.${tabClasses.selected}`]: {
+                                            color: "warning.main",
+                                        },
+                                    }}
                                 />
                             )
                         })}
                     </TabList>
                 </AppBar>
-                <TabPanel value={"user-1"}>
-                    <User user={"user-1"}/>
-                </TabPanel>
-                <TabPanel value={"user-2"}>
-                    <User user={"user-2"}/>
-                </TabPanel>
+                {users.map(({name,avatar}, index) => {
+                    return (
+                        <TabPanel value={name} key={`${index}-${name}`}>
+                            <User user={name} avatar={avatar}/>
+                        </TabPanel>
+                    )
+                })}
             </TabContext>
         </Stack>
     )
